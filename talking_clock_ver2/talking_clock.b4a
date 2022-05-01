@@ -1,0 +1,76 @@
+﻿Build1=Default,b4a.example
+File1=main.bal
+FileGroup1=Default Group
+Group=Default Group
+Library1=core
+Library2=tts
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="28"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.DarkTheme)~\n~'End of default text.~\n~
+Module1=Starter
+NumberOfFiles=1
+NumberOfLibraries=2
+NumberOfModules=1
+Version=10.2
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: talking_clock
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	Private timer2 As Timer
+End Sub
+
+Sub Globals
+	Private lblClock As Label
+	Private btnTalk As Button
+	Private tbtn1 As ToggleButton
+	Private Label1 As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("main")
+	timer2.Initialize("timer2", 500)
+	timer2.Enabled=True
+	'Starter.TTS1.SpeechRate = 0.75
+End Sub
+
+Sub Activity_Resume
+	If Starter.TTS1.IsInitialized = False Then
+		Starter.TTS1.Initialize("TTS1")
+		Starter.TTS1.SpeechRate = 0.75
+	End If
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	'Starter.TTS1.Release
+End Sub
+
+Sub btnTalk_Click
+	DateTime.DateFormat = "H"
+	'Log(DateTime.Time(DateTime.now))
+	Starter.TTS1.Speak("the time is " & DateTime.date(DateTime.now) & " hours, and", True)
+	DateTime.DateFormat = "m"
+	Starter.TTS1.Speak(DateTime.date(DateTime.now) & "minutes", False)
+End Sub
+
+Sub tbtn1_CheckedChange(Checked As Boolean)
+	If Checked Then 
+		Starter.timer1.Enabled=True
+		Else
+		Starter.timer1.Enabled=False
+	End If
+End Sub
+
+Sub timer2_Tick
+	DateTime.DateFormat = "HH:mm:ss"
+	lblClock.Text=DateTime.date(DateTime.now)
+End Sub
